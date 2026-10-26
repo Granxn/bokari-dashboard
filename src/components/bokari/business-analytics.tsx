@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { CalendarDays, BedDouble, Percent, Wallet, ChevronRight } from "lucide-react";
+import { CalendarDays, BedDouble, Percent, Wallet, ChevronRight, type LucideIcon } from "lucide-react";
 import { KpiCard } from "./kpi-card";
 import { ChartPanel, DarkTooltip } from "./chart-panel";
 import {
