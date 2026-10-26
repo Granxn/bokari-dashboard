@@ -30,6 +30,7 @@ function ConversionFunnel() {
   return (
     <ChartPanel
       className="lg:col-span-3"
+      title="Conversion Funnel"
       subtitle="Website visitors → successful bookings, last 30 days"
       action={
         <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
