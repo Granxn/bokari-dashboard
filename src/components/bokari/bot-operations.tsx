@@ -86,7 +86,7 @@ function BotPerformance() {
 }
 
 function IssueTracking() {
-  const max = issueData[0].count;
+  const max = issueData[0]?.count ?? 1;
   return (
     <ChartPanel title="Issue Tracking" subtitle="Frequency of error types, last 7 days">
       <div className="h-56">

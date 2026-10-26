@@ -23,10 +23,10 @@ import {
   roomTypes,
 } from "@/lib/mock-data";
 
-const kpiIcons = [CalendarDays, Percent, BedDouble, Wallet];
+const kpiIcons: LucideIcon[] = [CalendarDays, Percent, BedDouble, Wallet];
 
 function ConversionFunnel() {
-  const max = funnelData[0].value;
+  const max = funnelData[0]?.value ?? 1;
   return (
     <ChartPanel
       title="Conversion Funnel"
@@ -56,7 +56,7 @@ function ConversionFunnel() {
                 style={{ width: `${Math.max((row.value / max) * 100, 8)}%` }}
               >
                 <span className="text-[11px] font-semibold text-primary-foreground">
-                  {row.pct === 100 ? "" : `${Math.round((funnelData[i - 1].value / row.value) * 100 / 10) / 10}× drop-off`}
+                  {row.pct === 100 ? "" : `${Math.round(((funnelData[i - 1]?.value ?? row.value) / row.value) * 100 / 10) / 10}× drop-off`}
                 </span>
               </div>
             </div>
