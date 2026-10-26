@@ -29,7 +29,7 @@ function ConversionFunnel() {
   const max = funnelData[0]?.value ?? 1;
   return (
     <ChartPanel
-      title="Conversion Funnel"
+      className="lg:col-span-3"
       subtitle="Website visitors → successful bookings, last 30 days"
       action={
         <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
