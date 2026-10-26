@@ -118,10 +118,9 @@ function IssueTracking() {
         </ResponsiveContainer>
       </div>
       <p className="mt-2 border-t border-border pt-3 text-xs text-muted-foreground">
-        API Timeout accounts for <span className="font-semibold text-danger">
-          {Math.round((184 / max * 100))}% relative share
-        </span>{" "}
-        of top errors — investigate the payment gateway latency.
+        API Timeout is the top issue —{" "}
+        <span className="font-semibold text-danger">184 incidents, 36% of all failed interactions</span>{" "}
+        — investigate the payment gateway latency.
       </p>
     </ChartPanel>
   );
