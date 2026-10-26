@@ -74,7 +74,7 @@ function ConversionFunnel() {
 function BookingChannels() {
   const total = channelData.reduce((s, d) => s + d.value, 0);
   return (
-    <ChartPanel title="Booking Channels" subtitle="Share of 1,284 bookings this month">
+    <ChartPanel className="lg:col-span-2" title="Booking Channels" subtitle="Share of 1,284 bookings this month">
       <div className="relative mx-auto h-44 w-44">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
