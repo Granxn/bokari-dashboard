@@ -38,7 +38,9 @@ function ConversionFunnel() {
       }
     >
       <div className="flex flex-col gap-3">
-        {funnelData.map((row, i) => (
+        {funnelData.map((row, i) => {
+          const widthPct = Math.max((row.value / max) * 100, 8);
+          return (
           <div key={row.stage} className="group">
             <div className="mb-1.5 flex items-baseline justify-between">
               <span className="text-xs font-medium text-muted-foreground">
@@ -63,7 +65,8 @@ function ConversionFunnel() {
               </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
       <div className="mt-4 flex items-center gap-1.5 border-t border-border pt-3 text-xs text-muted-foreground">
         <ChevronRight className="h-3.5 w-3.5 text-primary" />
