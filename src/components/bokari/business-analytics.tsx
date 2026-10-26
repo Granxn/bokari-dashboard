@@ -53,11 +53,13 @@ function ConversionFunnel() {
             <div className="relative h-7 overflow-hidden rounded-md bg-secondary">
               <div
                 className="flex h-full items-center rounded-md bg-gradient-to-r from-primary/80 to-primary pl-3 transition-all duration-500"
-                style={{ width: `${Math.max((row.value / max) * 100, 8)}%` }}
+                style={{ width: `${widthPct}%` }}
               >
-                <span className="text-[11px] font-semibold text-primary-foreground">
-                  {row.pct === 100 ? "" : `${Math.round(((funnelData[i - 1]?.value ?? row.value) / row.value) * 100 / 10) / 10}× drop-off`}
-                </span>
+                {row.pct !== 100 && widthPct > 30 ? (
+                  <span className="text-[11px] font-semibold whitespace-nowrap text-primary-foreground">
+                    {Math.round(((funnelData[i - 1]?.value ?? row.value) / row.value) * 100 / 10) / 10}× drop-off
+                  </span>
+                ) : null}
               </div>
             </div>
           </div>
