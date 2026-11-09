@@ -20,7 +20,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ChartPanel, DarkTooltip } from "./chart-panel";
-import { callStatusData, issueData, callLogs, type CallStatus } from "@/lib/mock-data";
+import {
+  callStatusData,
+  issueData,
+  callLogs,
+  topIssue,
+  topIssueShare,
+  type CallStatus,
+} from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
 const totalCalls = callStatusData.reduce((s, d) => s + d.value, 0);
@@ -65,7 +72,9 @@ function BotPerformance() {
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
           <span className="font-display text-3xl text-success">68%</span>
-          <span className="text-[10px] tracking-wider text-muted-foreground uppercase">success rate</span>
+          <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
+            success rate
+          </span>
         </div>
       </div>
       <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5">
@@ -105,12 +114,19 @@ function IssueTracking() {
               axisLine={false}
               tickLine={false}
             />
-            <Tooltip content={<DarkTooltip suffix=" incidents" />} cursor={{ fill: "var(--accent)" }} />
+            <Tooltip
+              content={<DarkTooltip suffix=" incidents" />}
+              cursor={{ fill: "var(--accent)" }}
+            />
             <Bar dataKey="count" radius={[0, 6, 6, 0]} maxBarSize={18}>
               {issueData.map((entry, i) => (
                 <Cell
                   key={entry.type}
-                  fill={i === 0 ? "var(--danger)" : "color-mix(in oklab, var(--danger) 40%, var(--card))"}
+                  fill={
+                    i === 0
+                      ? "var(--danger)"
+                      : "color-mix(in oklab, var(--danger) 40%, var(--card))"
+                  }
                 />
               ))}
             </Bar>
@@ -118,8 +134,10 @@ function IssueTracking() {
         </ResponsiveContainer>
       </div>
       <p className="mt-2 border-t border-border pt-3 text-xs text-muted-foreground">
-        API Timeout is the top issue —{" "}
-        <span className="font-semibold text-danger">184 incidents, 36% of all failed interactions</span>{" "}
+        {topIssue.type} is the top issue —{" "}
+        <span className="font-semibold text-danger">
+          {topIssue.count} incidents, {topIssueShare}% of all failed interactions
+        </span>{" "}
         — investigate the payment gateway latency.
       </p>
     </ChartPanel>
@@ -136,8 +154,11 @@ function CallChatLogs() {
             Recent bot interactions — newest first
           </p>
         </div>
-        <Badge variant="outline" className="border-border bg-secondary text-xs text-muted-foreground">
-          {callLogs.length} of 3,625 records
+        <Badge
+          variant="outline"
+          className="border-border bg-secondary text-xs text-muted-foreground"
+        >
+          {callLogs.length} of {totalCalls.toLocaleString("en-US")} records
         </Badge>
       </header>
       <div className="overflow-x-auto">
@@ -156,7 +177,9 @@ function CallChatLogs() {
           <TableBody>
             {callLogs.map((log) => (
               <TableRow key={`${log.time}-${log.user}`} className="border-border">
-                <TableCell className="whitespace-nowrap text-xs text-muted-foreground">{log.time}</TableCell>
+                <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
+                  {log.time}
+                </TableCell>
                 <TableCell className="font-mono text-xs text-foreground">{log.user}</TableCell>
                 <TableCell className="text-xs text-muted-foreground">{log.channel}</TableCell>
                 <TableCell>

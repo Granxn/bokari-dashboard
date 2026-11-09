@@ -11,7 +11,14 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { CalendarDays, BedDouble, Percent, Wallet, ChevronRight, type LucideIcon } from "lucide-react";
+import {
+  CalendarDays,
+  BedDouble,
+  Percent,
+  Wallet,
+  ChevronRight,
+  type LucideIcon,
+} from "lucide-react";
 import { KpiCard } from "./kpi-card";
 import { ChartPanel, DarkTooltip } from "./chart-panel";
 import {
@@ -21,6 +28,8 @@ import {
   occupancyData,
   leadTimeData,
   roomTypes,
+  conversionRate,
+  checkoutDropOff,
 } from "@/lib/mock-data";
 
 const kpiIcons: LucideIcon[] = [CalendarDays, Percent, BedDouble, Wallet];
@@ -31,10 +40,10 @@ function ConversionFunnel() {
     <ChartPanel
       className="lg:col-span-3"
       title="Conversion Funnel"
-      subtitle="Website visitors → successful bookings, last 30 days"
+      subtitle="Direct-website visitors → successful bookings, this month"
       action={
         <span className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
-          8.6% overall
+          {conversionRate}% overall
         </span>
       }
     >
@@ -42,36 +51,44 @@ function ConversionFunnel() {
         {funnelData.map((row, i) => {
           const widthPct = Math.max((row.value / max) * 100, 8);
           return (
-          <div key={row.stage} className="group">
-            <div className="mb-1.5 flex items-baseline justify-between">
-              <span className="text-xs font-medium text-muted-foreground">
-                <span className="mr-2 text-[10px] text-muted-foreground/60">{i + 1}</span>
-                {row.stage}
-              </span>
-              <span className="flex items-center gap-3 text-xs">
-                <span className="text-muted-foreground">{row.pct === 100 ? "—" : `${row.pct}% of visitors`}</span>
-                <span className="font-semibold text-foreground">{row.value.toLocaleString()}</span>
-              </span>
-            </div>
-            <div className="relative h-7 overflow-hidden rounded-md bg-secondary">
-              <div
-                className="flex h-full items-center rounded-md bg-gradient-to-r from-primary/80 to-primary pl-3 transition-all duration-500"
-                style={{ width: `${widthPct}%` }}
-              >
-                {row.pct !== 100 && widthPct > 30 ? (
-                  <span className="text-[11px] font-semibold whitespace-nowrap text-primary-foreground">
-                    {Math.round(((funnelData[i - 1]?.value ?? row.value) / row.value) * 100 / 10) / 10}× drop-off
+            <div key={row.stage} className="group">
+              <div className="mb-1.5 flex items-baseline justify-between">
+                <span className="text-xs font-medium text-muted-foreground">
+                  <span className="mr-2 text-[10px] text-muted-foreground/60">{i + 1}</span>
+                  {row.stage}
+                </span>
+                <span className="flex items-center gap-3 text-xs">
+                  <span className="text-muted-foreground">
+                    {row.pct === 100 ? "—" : `${row.pct}% of visitors`}
                   </span>
-                ) : null}
+                  <span className="font-semibold text-foreground">
+                    {row.value.toLocaleString()}
+                  </span>
+                </span>
+              </div>
+              <div className="relative h-7 overflow-hidden rounded-md bg-secondary">
+                <div
+                  className="flex h-full items-center rounded-md bg-gradient-to-r from-primary/80 to-primary pl-3 transition-all duration-500"
+                  style={{ width: `${widthPct}%` }}
+                >
+                  {row.pct !== 100 && widthPct > 30 ? (
+                    <span className="text-[11px] font-semibold whitespace-nowrap text-primary-foreground">
+                      {(
+                        Math.round(((funnelData[i - 1]?.value ?? row.value) / row.value) * 10) / 10
+                      ).toFixed(1)}
+                      × drop-off
+                    </span>
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
           );
         })}
       </div>
       <div className="mt-4 flex items-center gap-1.5 border-t border-border pt-3 text-xs text-muted-foreground">
         <ChevronRight className="h-3.5 w-3.5 text-primary" />
-        Most drop-off happens at payment entry — 51.2% abandon before completing.
+        Biggest checkout drop-off: {checkoutDropOff.from} → {checkoutDropOff.to} —{" "}
+        {checkoutDropOff.pct}% of guests abandon at this step.
       </div>
     </ChartPanel>
   );
@@ -80,7 +97,11 @@ function ConversionFunnel() {
 function BookingChannels() {
   const total = channelData.reduce((s, d) => s + d.value, 0);
   return (
-    <ChartPanel className="lg:col-span-2" title="Booking Channels" subtitle="Share of 1,284 bookings this month">
+    <ChartPanel
+      className="lg:col-span-2"
+      title="Booking Channels"
+      subtitle={`Share of ${total.toLocaleString("en-US")} bookings this month`}
+    >
       <div className="relative mx-auto h-44 w-44">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -102,7 +123,9 @@ function BookingChannels() {
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
           <span className="font-display text-3xl text-foreground">{total.toLocaleString()}</span>
-          <span className="text-[10px] tracking-wider text-muted-foreground uppercase">bookings</span>
+          <span className="text-[10px] tracking-wider text-muted-foreground uppercase">
+            bookings
+          </span>
         </div>
       </div>
       <ul className="mt-4 space-y-2.5">
@@ -128,9 +151,7 @@ function OccupancyTrend() {
     <ChartPanel
       title="Occupancy Rate"
       subtitle="Daily occupancy over the last 14 days"
-      action={
-        <span className="text-xs font-semibold text-success">Peak 95.1% · Oct 25</span>
-      }
+      action={<span className="text-xs font-semibold text-success">Peak 95.1% · Oct 25</span>}
     >
       <div className="h-56">
         <ResponsiveContainer width="100%" height="100%">
@@ -189,12 +210,19 @@ function LeadTime() {
               axisLine={false}
               tickLine={false}
             />
-            <Tooltip content={<DarkTooltip suffix=" bookings" />} cursor={{ fill: "var(--accent)" }} />
+            <Tooltip
+              content={<DarkTooltip suffix=" bookings" />}
+              cursor={{ fill: "var(--accent)" }}
+            />
             <Bar dataKey="bookings" radius={[6, 6, 0, 0]} maxBarSize={44}>
               {leadTimeData.map((entry, i) => (
                 <Cell
                   key={entry.range}
-                  fill={i === 1 ? "var(--chart-1)" : "color-mix(in oklab, var(--chart-1) 35%, var(--card))"}
+                  fill={
+                    i === 1
+                      ? "var(--chart-1)"
+                      : "color-mix(in oklab, var(--chart-1) 35%, var(--card))"
+                  }
                 />
               ))}
             </Bar>
@@ -207,7 +235,10 @@ function LeadTime() {
 
 function TopRoomTypes() {
   return (
-    <ChartPanel title="Top Room Types" subtitle="Most booked rooms this month, with average daily rate">
+    <ChartPanel
+      title="Top Room Types"
+      subtitle="Most booked rooms this month, with average daily rate"
+    >
       <div className="space-y-4">
         {roomTypes.map((room, i) => (
           <div key={room.name}>
@@ -219,14 +250,14 @@ function TopRoomTypes() {
                 {room.name}
               </span>
               <span className="flex items-center gap-3">
-                <span className="text-muted-foreground">ADR {room.adr}</span>
+                <span className="text-muted-foreground">ADR ${room.adr}</span>
                 <span className="font-semibold text-foreground">{room.bookings} bookings</span>
               </span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-secondary">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary transition-all duration-500"
-                style={{ width: `${(room.share / 32) * 100}%` }}
+                style={{ width: `${(room.share / (roomTypes[0]?.share ?? 1)) * 100}%` }}
               />
             </div>
           </div>

@@ -3,44 +3,20 @@
 
 export const lastUpdated = "Oct 26, 2026 · 04:20 UTC";
 
-export const kpis = [
-  {
-    label: "Total Bookings",
-    value: "1,284",
-    delta: "+12.4%",
-    trend: "up" as const,
-    note: "vs. last month",
-  },
-  {
-    label: "Conversion Rate",
-    value: "8.6%",
-    delta: "+1.8 pts",
-    trend: "up" as const,
-    note: "visitors → bookings",
-  },
-  {
-    label: "Occupancy Rate",
-    value: "84.2%",
-    delta: "-2.1 pts",
-    trend: "down" as const,
-    note: "last 7 nights",
-  },
-  {
-    label: "Total Revenue",
-    value: "$284.5K",
-    delta: "+18.9%",
-    trend: "up" as const,
-    note: "vs. last month",
-  },
+// Website funnel covers the DIRECT WEBSITE channel only, so its final stage
+// must equal the "Direct Website" bookings in channelData (488).
+const funnelCounts = [
+  { stage: "Website Visitors", value: 32460 },
+  { stage: "Room Pages Viewed", value: 14210 },
+  { stage: "Booking Started", value: 2140 },
+  { stage: "Payment Details Entered", value: 1120 },
+  { stage: "Successful Bookings", value: 488 },
 ];
 
-export const funnelData = [
-  { stage: "Website Visitors", value: 32460, pct: 100 },
-  { stage: "Room Pages Viewed", value: 14210, pct: 43.8 },
-  { stage: "Booking Started", value: 6180, pct: 19.0 },
-  { stage: "Payment Details Entered", value: 3260, pct: 10.0 },
-  { stage: "Successful Bookings", value: 2790, pct: 8.6 },
-];
+export const funnelData = funnelCounts.map((row) => ({
+  ...row,
+  pct: Math.round((row.value / funnelCounts[0]!.value) * 1000) / 10,
+}));
 
 export const channelData = [
   { name: "Direct Website", value: 488, color: "var(--chart-1)" },
@@ -75,11 +51,11 @@ export const leadTimeData = [
 ];
 
 export const roomTypes = [
-  { name: "Deluxe Ocean View", bookings: 412, share: 32, adr: "$268" },
-  { name: "Executive Suite", bookings: 287, share: 22, adr: "$412" },
-  { name: "Garden Villa", bookings: 234, share: 18, adr: "$345" },
-  { name: "Standard King", bookings: 196, share: 15, adr: "$154" },
-  { name: "Family Suite", bookings: 155, share: 13, adr: "$386" },
+  { name: "Deluxe Ocean View", bookings: 412, share: 32, adr: 268 },
+  { name: "Executive Suite", bookings: 287, share: 22, adr: 412 },
+  { name: "Garden Villa", bookings: 234, share: 18, adr: 345 },
+  { name: "Standard King", bookings: 196, share: 15, adr: 154 },
+  { name: "Family Suite", bookings: 155, share: 13, adr: 386 },
 ];
 
 export const callStatusData = [
@@ -107,16 +83,160 @@ export const callLogs: {
   error?: string;
   duration: string;
 }[] = [
-  { time: "Oct 26 · 04:12", user: "guest_8412", channel: "Voice Call", status: "Success", duration: "2m 41s" },
-  { time: "Oct 26 · 03:58", user: "guest_7733", channel: "Chat", status: "Success", duration: "1m 12s" },
-  { time: "Oct 26 · 03:41", user: "guest_9021", channel: "Voice Call", status: "Failed", error: "API Timeout", duration: "0m 38s" },
-  { time: "Oct 26 · 03:17", user: "guest_6584", channel: "Voice Call", status: "Transferred", error: "Payment Failed", duration: "3m 05s" },
-  { time: "Oct 26 · 02:54", user: "guest_4110", channel: "Chat", status: "Success", duration: "0m 52s" },
-  { time: "Oct 26 · 02:33", user: "guest_2291", channel: "Voice Call", status: "Failed", error: "Voice Not Clear", duration: "0m 44s" },
-  { time: "Oct 26 · 01:58", user: "guest_8103", channel: "Voice Call", status: "Dropped", duration: "0m 09s" },
-  { time: "Oct 26 · 01:20", user: "guest_5177", channel: "Voice Call", status: "Success", duration: "4m 18s" },
-  { time: "Oct 25 · 23:47", user: "guest_3628", channel: "Chat", status: "Success", duration: "1m 36s" },
-  { time: "Oct 25 · 22:15", user: "guest_9945", channel: "Voice Call", status: "Failed", error: "API Timeout", duration: "0m 31s" },
-  { time: "Oct 25 · 21:02", user: "guest_7204", channel: "Voice Call", status: "Transferred", error: "Language Mismatch", duration: "2m 12s" },
-  { time: "Oct 25 · 20:39", user: "guest_6058", channel: "Voice Call", status: "Success", duration: "3m 27s" },
+  {
+    time: "Oct 26 · 04:12",
+    user: "guest_8412",
+    channel: "Voice Call",
+    status: "Success",
+    duration: "2m 41s",
+  },
+  {
+    time: "Oct 26 · 03:58",
+    user: "guest_7733",
+    channel: "Chat",
+    status: "Success",
+    duration: "1m 12s",
+  },
+  {
+    time: "Oct 26 · 03:41",
+    user: "guest_9021",
+    channel: "Voice Call",
+    status: "Failed",
+    error: "API Timeout",
+    duration: "0m 38s",
+  },
+  {
+    time: "Oct 26 · 03:17",
+    user: "guest_6584",
+    channel: "Voice Call",
+    status: "Transferred",
+    error: "Payment Failed",
+    duration: "3m 05s",
+  },
+  {
+    time: "Oct 26 · 02:54",
+    user: "guest_4110",
+    channel: "Chat",
+    status: "Success",
+    duration: "0m 52s",
+  },
+  {
+    time: "Oct 26 · 02:33",
+    user: "guest_2291",
+    channel: "Voice Call",
+    status: "Failed",
+    error: "Voice Not Clear",
+    duration: "0m 44s",
+  },
+  {
+    time: "Oct 26 · 01:58",
+    user: "guest_8103",
+    channel: "Voice Call",
+    status: "Dropped",
+    duration: "0m 09s",
+  },
+  {
+    time: "Oct 26 · 01:20",
+    user: "guest_5177",
+    channel: "Voice Call",
+    status: "Success",
+    duration: "4m 18s",
+  },
+  {
+    time: "Oct 25 · 23:47",
+    user: "guest_3628",
+    channel: "Chat",
+    status: "Success",
+    duration: "1m 36s",
+  },
+  {
+    time: "Oct 25 · 22:15",
+    user: "guest_9945",
+    channel: "Voice Call",
+    status: "Failed",
+    error: "API Timeout",
+    duration: "0m 31s",
+  },
+  {
+    time: "Oct 25 · 21:02",
+    user: "guest_7204",
+    channel: "Voice Call",
+    status: "Transferred",
+    error: "Language Mismatch",
+    duration: "2m 12s",
+  },
+  {
+    time: "Oct 25 · 20:39",
+    user: "guest_6058",
+    channel: "Voice Call",
+    status: "Success",
+    duration: "3m 27s",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Derived metrics — computed from the raw data above so every number on the
+// dashboard stays consistent when the mock data changes.
+// ---------------------------------------------------------------------------
+
+const sum = (xs: number[]) => xs.reduce((s, x) => s + x, 0);
+const round1 = (x: number) => Math.round(x * 10) / 10;
+
+export const totalBookings = sum(channelData.map((c) => c.value));
+
+/** Website conversion = successful bookings ÷ website visitors. */
+export const conversionRate = round1(
+  (funnelData[funnelData.length - 1]!.value / funnelData[0]!.value) * 100,
+);
+
+/** Biggest step-to-step drop-off inside the checkout flow (after "Booking Started"). */
+export const checkoutDropOff = funnelData
+  .slice(3)
+  .map((row, i) => ({
+    from: funnelData[i + 2]!.stage,
+    to: row.stage,
+    pct: round1((1 - row.value / funnelData[i + 2]!.value) * 100),
+  }))
+  .sort((a, b) => b.pct - a.pct)[0]!;
+
+/** Average occupancy across the last 7 nights. */
+export const occupancy7d = round1(sum(occupancyData.slice(-7).map((d) => d.occupancy)) / 7);
+
+/** Room revenue = Σ (bookings × ADR), assuming one room-night per booking. */
+export const totalRevenue = sum(roomTypes.map((r) => r.bookings * r.adr));
+
+export const totalCalls = sum(callStatusData.map((d) => d.value));
+export const failedCalls = callStatusData.find((d) => d.name === "Failed")?.value ?? 0;
+export const topIssue = issueData[0]!;
+export const topIssueShare = Math.round((topIssue.count / failedCalls) * 100);
+
+export const kpis = [
+  {
+    label: "Total Bookings",
+    value: totalBookings.toLocaleString("en-US"),
+    delta: "+12.4%",
+    trend: "up" as const,
+    note: "all channels, this month",
+  },
+  {
+    label: "Conversion Rate",
+    value: `${conversionRate}%`,
+    delta: "+0.3 pts",
+    trend: "up" as const,
+    note: "website visitors → bookings",
+  },
+  {
+    label: "Occupancy Rate",
+    value: `${occupancy7d}%`,
+    delta: "-2.1 pts",
+    trend: "down" as const,
+    note: "avg. last 7 nights",
+  },
+  {
+    label: "Room Revenue",
+    value: `$${(totalRevenue / 1000).toFixed(1)}K`,
+    delta: "+18.9%",
+    trend: "up" as const,
+    note: "bookings × ADR, this month",
+  },
 ];

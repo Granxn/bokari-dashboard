@@ -26,11 +26,17 @@ export function KpiCard({ label, value, delta, trend, note, icon: Icon }: KpiCar
               : "border-danger/25 bg-danger/10 text-danger",
           )}
         >
-          {trend === "up" ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+          {trend === "up" ? (
+            <TrendingUp className="h-3 w-3" />
+          ) : (
+            <TrendingDown className="h-3 w-3" />
+          )}
           {delta}
         </span>
       </div>
-      <p className="mt-4 text-xs font-medium tracking-wide text-muted-foreground uppercase">{label}</p>
+      <p className="mt-4 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+        {label}
+      </p>
       <p className="mt-1 font-display text-4xl leading-tight text-foreground">{value}</p>
       <p className="mt-1 text-xs text-muted-foreground">{note}</p>
     </div>
