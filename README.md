@@ -1,6 +1,6 @@
 # Bokari — Hotel AI Voicebot Dashboard
 
-**Live demo:** https://bokari-dashboard.lovable.app
+**Live demo:** https://bokari-dashboard.vercel.app
 
 A sales-demo dashboard for hotels that use an **AI voicebot** to take bookings and answer guests.
 It answers the two questions a hotel owner asks after buying a voicebot:
@@ -12,6 +12,10 @@ Built during my Data Science co-op internship at **Botnoi Group** (Media & Event
 pre-sales demo for the Bokari Hotel team.
 
 > ⚠️ All figures are **mock data** for demonstration. No real guest or hotel data is used.
+
+| Business Analytics | Bot Operations |
+|---|---|
+| ![Business Analytics tab](docs/business-analytics.png) | ![Bot Operations tab](docs/bot-operations.png) |
 
 ---
 
