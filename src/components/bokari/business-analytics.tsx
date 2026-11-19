@@ -237,7 +237,7 @@ function TopRoomTypes() {
   return (
     <ChartPanel
       title="Top Room Types"
-      subtitle="Most booked rooms this month, with average daily rate"
+      subtitle="Most booked rooms this month, with room nights sold and average daily rate"
     >
       <div className="space-y-4">
         {roomTypes.map((room, i) => (
@@ -251,6 +251,7 @@ function TopRoomTypes() {
               </span>
               <span className="flex items-center gap-3">
                 <span className="text-muted-foreground">ADR ${room.adr}</span>
+                <span className="text-muted-foreground">{room.roomNights} nights</span>
                 <span className="font-semibold text-foreground">{room.bookings} bookings</span>
               </span>
             </div>
