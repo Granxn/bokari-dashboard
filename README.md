@@ -64,7 +64,7 @@ All headline numbers are **derived from the raw mock data** in
 | Total bookings | Σ bookings across all channels |
 | Conversion rate | Successful website bookings ÷ website visitors |
 | Occupancy (7 nights) | Mean of the last 7 daily occupancy values |
-| Room revenue | Σ (bookings × ADR) per room type, one room-night per booking |
+| Room revenue | Σ (room nights sold × ADR) per room type |
 | Checkout drop-off | Largest `1 − next step ÷ previous step` after "Booking Started" |
 | Top-issue share | Incidents of the top error ÷ all failed interactions |
 
