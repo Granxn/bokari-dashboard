@@ -50,12 +50,14 @@ export const leadTimeData = [
   { range: "30+ days", bookings: 159 },
 ];
 
+// roomNights = total nights sold for that room type this month (a booking can
+// cover several nights). ADR = room revenue ÷ room nights sold.
 export const roomTypes = [
-  { name: "Deluxe Ocean View", bookings: 412, share: 32, adr: 268 },
-  { name: "Executive Suite", bookings: 287, share: 22, adr: 412 },
-  { name: "Garden Villa", bookings: 234, share: 18, adr: 345 },
-  { name: "Standard King", bookings: 196, share: 15, adr: 154 },
-  { name: "Family Suite", bookings: 155, share: 13, adr: 386 },
+  { name: "Deluxe Ocean View", bookings: 412, roomNights: 989, share: 32, adr: 268 },
+  { name: "Executive Suite", bookings: 287, roomNights: 603, share: 22, adr: 412 },
+  { name: "Garden Villa", bookings: 234, roomNights: 749, share: 18, adr: 345 },
+  { name: "Standard King", bookings: 196, roomNights: 314, share: 15, adr: 154 },
+  { name: "Family Suite", bookings: 155, roomNights: 434, share: 13, adr: 386 },
 ];
 
 export const callStatusData = [
@@ -202,8 +204,11 @@ export const checkoutDropOff = funnelData
 /** Average occupancy across the last 7 nights. */
 export const occupancy7d = round1(sum(occupancyData.slice(-7).map((d) => d.occupancy)) / 7);
 
-/** Room revenue = Σ (bookings × ADR), assuming one room-night per booking. */
-export const totalRevenue = sum(roomTypes.map((r) => r.bookings * r.adr));
+/** Room nights sold this month across all room types. */
+export const totalRoomNights = sum(roomTypes.map((r) => r.roomNights));
+
+/** Room revenue = Σ (room nights sold × ADR) per room type. */
+export const totalRevenue = sum(roomTypes.map((r) => r.roomNights * r.adr));
 
 export const totalCalls = sum(callStatusData.map((d) => d.value));
 export const failedCalls = callStatusData.find((d) => d.name === "Failed")?.value ?? 0;
@@ -237,6 +242,6 @@ export const kpis = [
     value: `$${(totalRevenue / 1000).toFixed(1)}K`,
     delta: "+18.9%",
     trend: "up" as const,
-    note: "bookings × ADR, this month",
+    note: "room nights × ADR, this month",
   },
 ];
